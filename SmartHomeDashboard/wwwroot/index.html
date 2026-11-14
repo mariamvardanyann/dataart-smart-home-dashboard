@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>HomePulse | Smart Home Dashboard</title>
+  <link rel="stylesheet" href="/styles.css"/>
+  <script src="/app.js" defer></script>
+</head>
+<body>
+<main class="layout">
+<header class="topbar"><div class="brand">⌂ <span>HOME<span class="accent">PULSE</span></span></div><span class="context">DATAART IT CAMP · WORKSHOP 4</span></header>
+<section class="hero">
+  <div><p class="eyebrow">DEVICE MONITORING CENTER</p><h1>Smart Home <span>Dashboard</span></h1><p class="subtitle">Live status and readings from connected virtual smart devices.</p></div>
+  <button id="refresh-button" type="button">↻ Refresh now</button>
+</section>
+<section class="summary" aria-label="Device summary">
+  <article class="stat"><span>Total devices</span><strong id="total-devices">—</strong><small>Configured devices</small></article>
+  <article class="stat"><span>Online devices</span><strong class="positive" id="online-devices">—</strong><small>Responding to /info</small></article>
+  <article class="stat"><span>Offline devices</span><strong class="warning" id="offline-devices">—</strong><small>Not reachable right now</small></article>
+</section>
+<section class="devices">
+<div class="section-head"><div><h2>Connected devices</h2><p>Updates every 5 seconds</p></div><div id="last-updated" role="status" aria-live="polite">Checking devices…</div></div>
+<div id="message" role="alert" hidden></div>
+<div id="device-list" class="device-grid" aria-live="polite"></div>
+</section>
+<footer>Built with ASP.NET Core Minimal APIs + HttpClient · DataArt IT Camp homework</footer>
+</main>
+</body>
+</html>
