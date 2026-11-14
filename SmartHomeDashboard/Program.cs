@@ -78,8 +78,8 @@ public sealed class DeviceMonitoringService(
 
         // The dashboard is local-only and must not probe arbitrary remote systems.
         if (!Uri.TryCreate(device.InfoUrl, UriKind.Absolute, out var url) ||
-            url.Scheme != Uri.UriSchemeHttp || !url.IsLoopback)
-            return Offline("Only local HTTP device endpoints are supported.");
+            !(url.Scheme == Uri.UriSchemeHttp || url.Scheme == Uri.UriSchemeHttps) || !url.IsLoopback)
+            return Offline("Only local HTTP or HTTPS device endpoints are supported.");
 
         try
         {
