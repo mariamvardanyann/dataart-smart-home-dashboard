@@ -4,7 +4,7 @@
 
 Monitoring dashboard homework for DataArt IT Camp 2026, Workshop 4: Building a Unified Smart Home Ecosystem with .NET.
 
-The ASP.NET Core 10 application polls local virtual devices through HTTP and displays their names, current metrics, online/offline statuses, total count, and number of online devices. The interface updates every five seconds.
+The ASP.NET Core 10 application polls local virtual devices through trusted local HTTPS and displays their names, current metrics, online/offline statuses, total count, and number of online devices. The interface updates every five seconds.
 
 ## Requirements
 
@@ -23,7 +23,7 @@ Terminal 1: dotnet run --launch-profile Device1
 
 Terminal 2: dotnet run --launch-profile Device2
 
-Confirm both http://localhost:1235/info and http://localhost:1237/info return JSON. The original emulator launch profiles use port 1234 for HTTPS and 1235 for HTTP (and 1236/1237 for the second device).
+Confirm both https://localhost:1234/info and https://localhost:1236/info return JSON. If Chrome warns about the local development certificate, run `dotnet dev-certs https --trust` in PowerShell and approve the local certificate. The original emulator launch profiles use port 1234 for HTTPS and 1235 for HTTP (and 1236/1237 for the second device).
 
 ## Run the dashboard
 
@@ -41,7 +41,7 @@ With both emulators running: 2 total, 2 online, 0 offline. Stop one emulator: 2 
 - GET /api/dashboard — combined device snapshot
 - GET /api/devices — individual device details
 
-Device URLs are configured in SmartHomeDashboard/appsettings.json. The dashboard supports local HTTP endpoints only and has no device command-execution feature. Do not expose the original emulator's remote-command APIs to the Internet.
+Device URLs are configured in SmartHomeDashboard/appsettings.json. The dashboard supports local HTTP or HTTPS endpoints only and has no device command-execution feature. Do not expose the original emulator's remote-command APIs to the Internet.
 
 ## Build and tests
 
@@ -51,7 +51,7 @@ From the repository root:
     dotnet build SmartHomeDashboard/SmartHomeDashboard.csproj --configuration Release
     python tests/test_dashboard_integration.py
 
-GitHub Actions builds the application and runs integration tests with two simulated local HTTP devices; these verify 2, 1 and 0 online-device states. This is not a substitute for verifying locally against the original .NET 11 emulator.
+GitHub Actions builds the application and runs integration tests with two simulated local HTTP devices (environment-variable overrides); these verify 2, 1 and 0 online-device states. This is not a substitute for verifying locally against the original .NET 11 emulator.
 
 Optional MCP/AI and workflow-engine exercises are not included.
 
@@ -61,3 +61,7 @@ Submit a Word document with the full name Mariam Vardanyan and this public repos
 https://github.com/mariamvardanyann/dataart-smart-home-dashboard
 
 Deadline: November 23, 2026, 03:59 Armenia time (+04:00).
+
+## Troubleshooting HTTP 307
+
+The official emulator uses HTTPS redirection. The dashboard is configured to request `https://localhost:1234/info` and `https://localhost:1236/info` directly. If you previously cloned the dashboard, run `git pull` in its repository folder and restart `dotnet run` to use these changes. Local development certificates must be trusted on Windows (`dotnet dev-certs https --trust`). Do not disable TLS certificate verification.
