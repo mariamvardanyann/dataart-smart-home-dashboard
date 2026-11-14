@@ -1,6 +1,7 @@
 """Integration test: ASP.NET Core dashboard against simulated local device endpoints."""
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import json
+import os
 from pathlib import Path
 import subprocess
 import sys
@@ -68,12 +69,15 @@ def main():
     d2, t2 = start_device(1237, "Device2")
     log_path = ROOT / "integration-server.log"
     with log_path.open("w", encoding="utf-8") as log:
+        env = os.environ.copy()
+        env['Monitoring__Devices__0__InfoUrl'] = 'http://localhost:1235/info'
+        env['Monitoring__Devices__1__InfoUrl'] = 'http://localhost:1237/info'
         app = subprocess.Popen([
             "dotnet", "run",
             "--project", "SmartHomeDashboard/SmartHomeDashboard.csproj",
             "--configuration", "Release", "--no-build",
             "--no-launch-profile", "--urls", APP_URL,
-        ], cwd=ROOT, stdout=log, stderr=subprocess.STDOUT)
+        ], cwd=ROOT, env=env, stdout=log, stderr=subprocess.STDOUT)
         try:
             for _ in range(50):
                 if app.poll() is not None:
